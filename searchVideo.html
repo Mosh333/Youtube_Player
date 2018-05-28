@@ -1,0 +1,218 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+        <link rel="stylesheet" type="text/css" href="main.css">
+        <title>Youtube Player</title>
+    </head>
+    <body>
+        <nav>
+            <div class="nav-wrapper">
+              <a href="#" class="brand-logo">Youtube Player</a>
+              <ul id="nav-mobile" class="right">
+                <li><a>Play a Video!</a></li>
+              </ul>
+            </div>
+        </nav>
+        <div class="row">
+            <div id="firstCol" class="col s5">
+              <p></p>
+              <label class="label-font">What Would You Like to Do?</label>
+              <select id="selectOptions" class="browser-default">
+                <option value="" disabled selected>Choose your option</option>
+                <option value="1">Create/Modify Playlist</option>
+                <option value="2">Play a Playlist</option>
+                <option value="3">Search a Video</option>
+                <option value="4">Generate Playlist Text File</option>
+                <option value="5">If not hard, convert to MP3</option>
+              </select>
+              <script>
+                  var temp = document.getElementById("selectOptions").addEventListener("change", redirect)
+
+                  //For dropdown menu to be able to redirect page
+
+                  function redirect(){
+                      // console.log("Hello");  
+                      // alert("Hello Worlds!")
+                      if(this.value == 1){
+                        //Here redirect to different html page
+                        window.location = "changePlaylist.html";
+                      }else if(this.value == 2){
+                        window.location = "playPlaylist.html";
+                      }else if(this.value == 3){
+                        //document.getElementById("selectOptions").value = "";
+                        //window.location = "searchVideo.html";
+                      }else if(this.value == 4){
+                        window.location = "generateTxtFile.html";
+                      }// }else if(this.value == 5){
+                      //   
+                      //   window.location = 
+                      // }  
+                  }
+
+              </script>
+              <p>Search Results:</p>
+              <nav>
+                <div id="searchBar" class="nav-wrapper">
+                  <form>
+                    <div class="input-field">
+                      <input id="search" type="search" required placeholder="Search for a video..">
+                      <label for="search"><i class="material-icons">&#x1F50D;</i></label>
+                      <i class="material-icons">X</i>
+                    </div>
+                  </form>
+                </div>
+              </nav>
+              <div id="debug">Testing right now</div>
+              <script>
+                const node = document.getElementById("search");
+                node.addEventListener("keydown", function(event) {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        // Do more work ie implement logic to search and list videos from youtube
+                        document.getElementById("debug").innerHTML = "Searching for: "+node.value;
+                        const electron = require('electron');
+                        const {ipcRenderer} = electron;
+                        const makeButton = document.querySelector('button');
+
+                        makeButton.addEventListener('click', mySearchVideos);
+
+                        function mySearchVideos(e){
+                            //const item = document.querySelector('#item').value;
+                            link = "https://www.youtube.com/watch?v=5mQ1nLPt4vg"
+                            ipcRenderer.send('youtube:search', node.value); //like socket client to server
+                            alert("Hello World!");
+                        }
+
+                    }
+                });
+
+                //Cancel button functionality
+                const cancelButton = document.getElementsByClassName("material-icons")[1]; //get second element of material-icons
+                cancelButton.addEventListener("mousedown", function(event) {
+                    document.getElementById("search").value = "";
+                    document.getElementById("debug").innerHTML = "";
+                });                
+                // 2. This code loads the IFrame Player API code asynchronously.
+                var tag = document.createElement('script');
+
+                tag.src = "https://www.youtube.com/iframe_api";
+                var firstScriptTag = document.getElementsByTagName('script')[0];
+                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+                // 3. This function creates an <iframe> (and YouTube player)
+                //    after the API code downloads.
+                var player;
+                function onYouTubeIframeAPIReady() {
+                    player = new YT.Player('player', {
+                      height: '390',
+                      width: '640',
+                      videoId: 'Ec6GomxQxks',
+                      events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                      }
+                    });
+                  }
+                  document.getElementById("debug").innerHTML = "Cunt Bitches";
+
+              </script>
+              <ul id="searchList"></ul>            
+            </div>
+            <div id="secondCol" class="col s7">
+                <p></p>
+
+                <div id="videoTitle"></div>        
+                <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+                <div id="player"></div>
+
+                <script>
+                  // 2. This code loads the IFrame Player API code asynchronously.
+                  var tag = document.createElement('script');
+
+                  tag.src = "https://www.youtube.com/iframe_api";
+                  var firstScriptTag = document.getElementsByTagName('script')[0];
+                  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+                  // 3. This function creates an <iframe> (and YouTube player)
+                  //    after the API code downloads.
+                  var player;
+                  function onYouTubeIframeAPIReady() {
+                    player = new YT.Player('player', {
+                      height: '320',
+                      width: '420',
+                      videoId: 'Ec6GomxQxks',
+                      events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                      }
+                    });
+                  }
+
+                  // 4. The API will call this function when the video player is ready.
+                  function onPlayerReady(event) {
+                    event.target.playVideo();
+                  }
+
+                  // 5. The API calls this function when the player's state changes.
+                  //    The function indicates that when playing a video (state=1),
+                  //    the player should play for six seconds and then stop.
+                  var done = false;
+                  function onPlayerStateChange(event) {
+                    // var x = player.getDuration();
+                    // alert("video duration is: "+x); 
+                    if (event.data == YT.PlayerState.PLAYING && !done) {
+                      setTimeout(stopVideo, 6000);
+                      done = true;
+                    }
+                    if(event.data == YT.PlayerState.PLAYING){
+                        //document.getElementById("videoTitle").innerHTML = player.cueVideoById()
+                        document.getElementById("debug").innerHTML = player.getDuration() + " ";
+                    }
+                    // player.cueVideoById(videoId:String,
+                    // startSeconds:Number,
+                    // suggestedQuality:String)
+                  }
+                  function stopVideo() {  
+                    player.stopVideo();
+                  }               
+                </script>
+                <p>Youtube Videos</p> 
+            </div>
+        </div>
+
+        <!-- <ul></ul> -->
+        <script>
+            const electron = require('electron');
+            const {ipcRenderer} = electron;
+            const ul = document.querySelector('#searchList');
+
+            //catch add item
+            ipcRenderer.on('item:add', function(e,item){
+                ul.className = "collection";
+                const li = document.createElement('li');
+                li.className = 'collection-item'
+                const itemText = document.createTextNode(item);
+                li.appendChild(itemText);
+                ul.appendChild(li);
+            });
+
+            //catch clear item
+            ipcRenderer.on('item:clear', function(e,item){
+                ul.innerHTML = '';
+                ul.className = '';
+            });   
+
+            //Remove item
+            ul.addEventListener('dblclick', removeItem);
+
+            function removeItem(e){
+                e.target.remove();
+                if(ul.children.length == 0){
+                    ul.className = '';
+                }
+            }
+
+
+        </script>
+    </body>
+</html>

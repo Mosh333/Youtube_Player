@@ -1,0 +1,25 @@
+{
+  "name": "youtube_player",
+  "version": "1.0.0",
+  "description": "Play Youtube videos on repeat",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mosh333/Youtube_Player.git"
+  },
+  "author": "Moshiur Howlader",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mosh333/Youtube_Player/issues"
+  },
+  "homepage": "https://github.com/Mosh333/Youtube_Player#readme",
+  "dependencies": {
+    "electron": "^2.0.1",
+    "google-auth-library": "^0.12.0",
+    "googleapis": "^21.3.0",
+    "jquery": "^3.3.1"
+  }
+}

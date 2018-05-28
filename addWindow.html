@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+
+        <title>Add Shopping List Item</title>
+    </head>
+    <body>
+        <div class="container">
+            <form>
+                <div>
+                   <label>Enter Item</label>
+                   <input type="text" id="item" autofocus>
+                </div>
+                <button class="btn waves-effect waves-light" type="submit">add Item</button>
+            </form>
+        </div>
+
+        <script>
+            //Here the DOM is being used
+            const electron = require('electron');
+            const {ipcRenderer} = electron; //for IPC comm between js and html
+
+            const form = document.querySelector('form'); //DOM
+            form.addEventListener('submit', submitForm);
+
+            function submitForm(e){
+                e.preventDefault();
+                //console.log(123);
+                const item = document.querySelector('#item').value;
+                ipcRenderer.send('item:add', item); //like socket client to server
+            }
+        </script>
+        
+        <div class="row">
+            <div class="col s3">
+                <!-- Grey navigation panel -->
+            </div>
+            <div class="col s9">
+                <!-- Teal page content  -->                
+            </div>
+        </div>
+    </body>
+</html>

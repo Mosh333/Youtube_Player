@@ -1,0 +1,139 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+        <link rel="stylesheet" type="text/css" href="main.css">
+        <title>Youtube Player</title>
+    </head>
+    <body>
+        <nav>
+            <div class="nav-wrapper">
+              <a href="#" class="brand-logo">Youtube Player</a>
+              <ul id="nav-mobile" class="right">
+                <li><a>Play a Playlist</a></li>
+              </ul>
+            </div>
+        </nav>
+        <div class="row">
+            <div id="firstCol" class="col s5">
+              <p></p>
+              <label class="label-font">What Would You Like to Do?</label>
+              <select id="selectOptions" class="browser-default">
+                <option value="" disabled selected>Choose your option</option>
+                <option value="1">Create/Modify Playlist</option>
+                <option value="2">Play a Playlist</option>
+                <option value="3">Search a Video</option>
+                <option value="4">Generate Playlist Text File</option>
+                <option value="5">If not hard, convert to MP3</option>
+              </select>
+              <script>
+                  var temp = document.getElementById("selectOptions").addEventListener("change", redirect)
+
+                  //console.log(temp);
+
+                  function redirect(){
+                      // console.log("Hello");  
+                      // alert("Hello Worlds!")
+                      if(this.value == 1){
+                        //Here redirect to different html page
+                        window.location = "changePlaylist.html";
+                      }else if(this.value == 2){
+                        
+                        window.location = "playPlaylist.html";
+                      }else if(this.value == 3){
+                        
+                        window.location = "searchVideo.html";
+                      }else if(this.value == 4){
+                        
+                        window.location = "generateTxtFile.html";
+                      }// }else if(this.value == 5){
+                      //   
+                      //   window.location = 
+                      // }  
+                  }
+
+              </script>
+              <p>Search Results:</p>
+              <ul id="searchList"></ul>            
+            </div>
+            <div id="secondCol" class="col s7">
+                <p></p>
+                <!-- <button id="button1" class="waves-effect waves-light btn">Make Playlist</button> -->
+
+<!--                 <script>
+                    const electron = require('electron');
+                    const {ipcRenderer} = electron;
+                    const makeButton = document.querySelector('button');
+
+                    makeButton.addEventListener('click', myWriteFile);
+
+                    function myWriteFile(e){
+                        //const item = document.querySelector('#item').value;
+                        link = "https://www.youtube.com/watch?v=5mQ1nLPt4vg"
+                        ipcRenderer.send('item:write', "myFile.txt", link); //like socket client to server
+                        alert("Hello World!");
+                    }
+                </script> -->
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>
+                <p>Youtube Videos</p>                 
+
+            </div>
+        </div>
+
+        <!-- <ul></ul> -->
+        <script>
+            const electron = require('electron');
+            const {ipcRenderer} = electron;
+            const ul = document.querySelector('#searchList');
+
+            //catch add item
+            ipcRenderer.on('item:add', function(e,item){
+                ul.className = "collection";
+                const li = document.createElement('li');
+                li.className = 'collection-item'
+                const itemText = document.createTextNode(item);
+                li.appendChild(itemText);
+                ul.appendChild(li);
+            });
+
+            //catch clear item
+            ipcRenderer.on('item:clear', function(e,item){
+                ul.innerHTML = '';
+                ul.className = '';
+            });   
+
+            //Remove item
+            ul.addEventListener('dblclick', removeItem);
+
+            function removeItem(e){
+                e.target.remove();
+                if(ul.children.length == 0){
+                    ul.className = '';
+                }
+            }
+
+
+        </script>
+    </body>
+</html>
