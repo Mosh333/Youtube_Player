@@ -11,6 +11,8 @@ var SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl']
 var TOKEN_DIR = __dirname + '\\.credentials\\';
 var TOKEN_PATH = TOKEN_DIR + 'google-apis-nodejs-quickstart.json';
 
+var searchHistory = []; //store all search results
+
 const {app, BrowserWindow, Menu, ipcMain} = electron;
 
 //Set environment
@@ -24,7 +26,7 @@ app.on('ready', function(){
     //Create new window
     mainWindow = new BrowserWindow({resizable: true});
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'mainWindow.html'),
+        pathname: path.join(__dirname, 'searchVideo.html'),
         protocol: 'file:',
         slashes: true
     }));
@@ -75,10 +77,17 @@ ipcMain.on('item:write', function(e, item1, item2){
     //mainWindow.webContents.send('item:write', item);
 });
 
+//Send List of Previously Searched Items
+ipcMain.on('youtube:searchHistory', function(e){
+    console.log(searchHistory);
+    mainWindow.webContents.send('youtube:searchHistory', searchHistory);
+});
+
 //Catch youtube:search
 ipcMain.on('youtube:search', function(e, videoName){
-    console.log(item1+" "+item2);
-    myWriteFile(item1, item2);
+    console.log("*********************************************");
+    console.log("Searching for: "+videoName);
+    searchHistory.push(videoName);
     //mainWindow.webContents.send('item:write', item);
 
     // Load client secrets from a local file.
@@ -89,13 +98,17 @@ ipcMain.on('youtube:search', function(e, videoName){
       }
       // Authorize a client with the loaded credentials, then call the YouTube API.
       //See full code sample for authorize() function code.
-    authorize(JSON.parse(content), {'params': {'maxResults': '10',
+    authorize(JSON.parse(content), {'params': {'maxResults': '12',
                      'part': 'snippet',
                      'q': videoName,
                      'type': ''}}, searchListByKeyword);
 
+    //mainWindow.webContents.send('item:add', item) is embedded in the searchListByKeyword() function
+
     });
 });
+
+
 
 function myWriteFile(fileName, data){
     var filePath = path.join(__dirname, '/text_files/'+fileName);
@@ -311,7 +324,9 @@ function searchListByKeyword(auth, requestData) {
     }
     my_obj = response;
     console.log(my_obj.items);
-    console.log("We will access the objects now!");
-
+    console.log("Sending Object now");
+    mainWindow.webContents.send('youtube:search', response); //send the JSON object to be parsed at the other end
+    console.log("Sent");
+    console.log("*****************************************");
   });
 }
