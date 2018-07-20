@@ -3,6 +3,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
   <link rel="stylesheet" type="text/css" href="main.css">
   <link rel="stylesheet" type="text/css" href="slideshow.css">
+<!--   <link rel="stylesheet" type="text/css" href="menuButton.css"> -->
   <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
   <script type="text/javascript" src="node_modules/materialize-css/dist/js/materialize.js"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -76,7 +77,7 @@
                   <option value="1">Search a Video</option>
                   <option value="2">Play a Playlist</option>
                   <option value="3">Create/Modify Playlist</option>
-                  <option value="4">Generate Playlist Text File</option>
+                  <option value="4">Drop Down Menu Test</option>
                   <option value="5">If not hard, convert to MP3</option>
                 </select>
                 <script>
@@ -98,7 +99,7 @@
                         //window.location = "changePlaylist.html";                        
                       }else if(this.value == 4){
 
-                        window.location = "generateTxtFile.html";
+                        window.location = "test.html";//"generateTxtFile.html";
                       }// }else if(this.value == 5){
                       //   
                       //   window.location = 
@@ -170,11 +171,15 @@
             <div id="secondCol" class="col s7">
               <p></p>
               <div class="slideshow-container">
-
-                <div class="mySlides fade">
+                <div class="slideshow-button"><button id="leftSlide">◀</button></div>
+                <!-- http://78.media.tumblr.com/tumblr_lwl6mnLzRs1qze0hyo1_500.jpg -->
+                <div class="slideshow-image"><img id="slideshow-image" src="https://i.ytimg.com/vi/tTPqE4cnPUY/hqdefault.jpg" height="200" width="200"></div>
+                <div class="slideshow-text"><p>【みうめ・メイリア・217】桃源恋歌[Tougen Renka] OFFiCiAL</p></div>
+                <div class="slideshow-button"><button id="rightSlide">▶</button></div>
+<!--                 <div class="mySlides fade">
                   <div class="numbertext">1 / 3</div>
-                  <img src="http://78.media.tumblr.com/tumblr_lwl6mnLzRs1qze0hyo1_500.jpg" style="width:200px; height:200px;">
-                  <div class="text">Caption Text</div>
+                  <img src="https://i.ytimg.com/vi/NYnbyq_k9ow/hqdefault.jpg" style="width:200px; height:200px;">
+                  <div class="text">【みうめ・メイリア・217】桃源恋歌[Tougen Renka] OFFiCiAL</div>
                 </div>
 
                 <div class="mySlides fade">
@@ -190,19 +195,19 @@
                 </div>
 
                 <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a> -->
 
               </div>
               <br>
 
-              <div style="text-align:center">
+<!--               <div style="text-align:center">
                 <span class="dot" onclick="currentSlide(1)"></span> 
                 <span class="dot" onclick="currentSlide(2)"></span> 
                 <span class="dot" onclick="currentSlide(3)"></span> 
-              </div>
+              </div> -->
               <div id="bottom_lower_half_container">
-                <select id="selectOptions" class="browser-default">
-                  <option value="" disabled selected>Choose your option</option>
+                <select id="selectOptionsPlaylist" class="browser-default">
+                  <option value="" disabled selected>Choose your playlist to modify</option>
                   <option value="1">Search a Video</option>
                   <option value="2">Play a Playlist</option>
                   <option value="3">Create/Modify Playlist</option>                
@@ -211,53 +216,313 @@
                 </select>
                 <!-- <button id="button1" class="waves-effect waves-light btn">Make Playlist</button> -->
 
-<!--                 <script>
-                    const electron = require('electron');
-                    const {ipcRenderer} = electron;
-                    const makeButton = document.querySelector('button');
+                <script>
+                  var tempPlaylist = document.getElementById("selectOptionsPlaylist").addEventListener("change", displayPlaylistContent);
 
-                    makeButton.addEventListener('click', myWriteFile);
+                  //this function will display appropriate contents about the selected playlist
+                  //top should be just one image in center and two button left and right and the image should just change ever 5 sec of
+                  //the selected playlist
+                  //the select menu should dynamically update based on the playlists (take care of cases when new playlist was made)
+                  //once the playlist is selected
+                  //user should be able to reorder by clicking the two songs one after another to swap
+                  //the songs should have x to delete from (play)list 
+                  //DO I NEED TO STORE SPECIAL INFORMATION LIKE VIDEO NAME, PIC URL, AND VID URL IN THE FOLDER PLAYLIST_SUPPLEMENTARY?
+                  function displayPlaylistContent(){
+                    
+                      if(this.value == 1){
+                        document.getElementById('content1').innerHTML = 'appley';
+                      }else if(this.value == 2){
+                        document.getElementById('content1').innerHTML = 'batty';
+                      }else if(this.value == 3){
+                        document.getElementById('content1').innerHTML = 'catty';                       
+                      }else if(this.value == 4){
+                        document.getElementById('content1').innerHTML = 'doggy';
+                      }else if(this.value == 5){
+                        document.getElementById('content1').innerHTML = 'eggy';
+                      }  
+                  }
 
-                    function myWriteFile(e){
-                        //const item = document.querySelector('#item').value;
-                        link = "https://www.youtube.com/watch?v=5mQ1nLPt4vg"
-                        ipcRenderer.send('item:write', "myFile.txt", link); //like socket client to server
-                        alert("Hello World!");
+                  // set up variables here
+                  //later change from 2000 to a function that dynamically
+                  //decides when to keep counting or pause when user scrolls with slides
+                  var vidTitles = ["Nightcore - One Day「Rei Yasuda」",
+                                    "Maduk ft. Veela - Ghost Assassin VIP",
+                                    "【Re:Zero Kara Hajimeru Isekai Seikatsu ED完整】完整 STYX HELIX【中日歌詞】 【最高音質】",
+                                    "Tsunenori;Kotomi;Saki;T-NOX - さよならさよなら",
+                                    "【みうめ・メイリア・217】桃源恋歌[Tougen Renka] OFFiCiAL",
+                                    "One Piece Op.20 【Namie Amuro】- Hope , Nightcore(Lyrics in description)"];
+                  var imageLinks = ["https://i.ytimg.com/vi/NYnbyq_k9ow/hqdefault.jpg",
+                                    "https://i.ytimg.com/vi/-iYzuc_gM9U/hqdefault.jpg",
+                                    "https://i.ytimg.com/vi/17dkakgqFiw/hqdefault.jpg",
+                                    "https://i.ytimg.com/vi/PE2fQFAHpPE/hqdefault.jpg",
+                                    "https://i.ytimg.com/vi/QtuWTHHzfXE/hqdefault.jpg",
+                                    "https://i.ytimg.com/vi/tTPqE4cnPUY/hqdefault.jpg"];
+                  var counter = 0;
+                  var isPaused = false;
+                  var slideshowImage = document.getElementById('slideshow-image');
+                  var slideshowTitle = document.getElementsByClassName('slideshow-text')[0];
+                  setInterval(changeSlidesPeriodically, 3000);
+                  
+
+                  function changeSlidesPeriodically(){
+
+                    if(!isPaused){
+                      slideshowImage.src = imageLinks[counter];
+                      slideshowTitle.innerHTML = vidTitles[counter];
+                      console.log(counter);
+                      counter++;
+                      if (counter >= imageLinks.length) {
+                        console.log("Counter value here is: " + counter);
+                        counter = 0;
+                        // clearInterval(inst); // uncomment this if you want to stop refreshing after one cycle
+                      }  
+                    }                  
+                  }
+                  //Easier to use get Elements by Id than Class name since we only have 2 items
+                  //If we have something like 10, use Elements by class name and for loop to iterate through the elements
+                  document.getElementById('leftSlide').addEventListener("click", function(event){
+                    // alert('Hello World, leftSlide here!');
+
+                    //To deal with timing issues, this condition must be checked
+                    if(!isPaused){
+                      isPaused = true;
+                      if( (counter - 2) < 0){
+                        counter = imageLinks.length-1;
+                      }else{
+                        counter = counter - 2;
+                      }
+                    }else{
+                      if( (counter - 1) < 0){
+                        counter = imageLinks.length-1;
+                      }else{
+                        counter = counter - 1;
+                      }
+                    }
+
+
+                    console.log("Counter value is: "+ counter);
+                    slideshowTitle.innerHTML = vidTitles[counter];
+                    slideshowImage.src = imageLinks[counter];
+                    console.log("Changing to previous image!");
+                    if(isPaused){
+                      setTimeout(setToUnpause, 5000);                                      
+                    }
+    
+                  });
+
+                  document.getElementById('rightSlide').addEventListener("click", function(event){
+                    // alert('Hello World, rightSlide here!');
+                    if(!isPaused){
+                      isPaused = true;
+                      if( (counter - 1) >= imageLinks.length){
+                        counter = 0;
+                      }else{
+                        counter = counter + 0;
+                      }
+                    }else{
+                      if( (counter + 1) >= imageLinks.length){
+                        counter = 0;
+                      }else{
+                        counter = counter + 1;
+                      }
+                    }
+
+                    slideshowImage.src = imageLinks[counter];
+                    slideshowTitle.innerHTML = vidTitles[counter];
+                    if(isPaused){
+                      setTimeout(setToUnpause, 5000);                                      
+                    }
+
+                  });
+
+                  function setToUnpause(){
+                    isPaused = false;
+                  }
+
+                  // document.getElementById()
+                </script>
+
+                  <div id=playlistContent1>
+                    use this container to display 
+                    <p id=content1>Test</p>
+                  </div>
+                  <div id=playlistContent2>
+                    <p id=content2>Test</p>
+                  </div>
+                  <p id="putitin">Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+                  <p>Youtube Videos</p>
+
+
+<!--                   <script type="text/javascript">
+                    var text = ["Welcome", "Hi", "Sup dude"];
+                    var counter = 0;
+                    var elem = document.getElementById("changeText");
+                    var inst = setInterval(change, 1000);
+
+                    function change() {
+                      elem.innerHTML = text[counter];
+                      counter++;
+                      if (counter >= text.length) {
+                        counter = 0;
+                        // clearInterval(inst); // uncomment this if you want to stop refreshing after one cycle
+                      }
                     }
                   </script> -->
-                  <p>Test</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>
-                  <p>Youtube Videos</p>                 
+<!--                   <p>Click the button to show the dialog.</p>
+
+                  <button onclick="addToPlayList()">Show dialog</button>
+
+                  <p><b>Note:</b> Use the "Esc" button to close the modal.</p>
+                  <p><b>Note:</b> The dialog element is only supported in Chrome 37+, Safari 6+ and Opera 24+.</p>
+ -->
+                  <dialog id="myDialog">This is a dialog window</dialog>
+
                 </div>
               </div>
             </div>
 
             <!-- <ul></ul> -->
             <script>
-              const electron = require('electron');
-              const {ipcRenderer} = electron;
-              const ul = document.querySelector('#searchListOld');
+            var currentlySelectedLink;
+            var currentlySelectedImage;
+            var currentlySelectedTitle;
+            function addToPlayList(list, buttonNumber) {
+                
+                document.getElementById("myDialog").innerHTML = "Please Select Which Playlist " + "<br />" + "You Want to Add the Song to" +"<br />";
+                document.getElementById("myDialog").innerHTML.id = "modalText";
+                // const anElem = document.createElement("a");
+                // anElem.innerHTML = "Doggy";
+                // document.getElementById("myDialog").appendChild(anElem);
+                //Create Collection Items and place into Modal Prompt
+                var playlistList = document.createElement("ul"); //Create Unordered List
+                var checkBox = document.createElement("INPUT");
+                checkBox.setAttribute("type", "checkbox");
+                checkBox.className = "filled-in";
+                document.getElementById("putitin").innerHTML = list;
+                var playlistNum = list.length; //counts number of playlist
+                var li_createNewPlaylistDOM = document.createElement('li');
+                li_createNewPlaylistDOM.className = 'collection-item';
+                li_createNewPlaylistDOM.id = 'createNewPlaylistID';
+                var makeNewPlaylistOption = document.createTextNode("Create New Playlist");
+                var inputForm = document.createElement('input');
+                var inputFormButton = document.createElement('button');
+                inputForm.placeholder = "Enter New Playlist Name Here"
+                inputFormButton.innerHTML = "Create";
+                inputForm.id = "inputForm";
+                inputFormButton.id = "inputFormButton";
+                // inputFormButton.style.align = "right";
+                // makeNewPlaylistOption.appendChild(inputForm);
+                li_createNewPlaylistDOM.appendChild(makeNewPlaylistOption);
+                li_createNewPlaylistDOM.appendChild(inputForm);
+                li_createNewPlaylistDOM.appendChild(inputFormButton);
+                playlistList.appendChild(li_createNewPlaylistDOM);
+                var closeButton = document.createElement('span');
+                closeButton.id = "closeButton";
+                closeButton.className = "close";
+                closeButton.innerHTML = "&times;";
+                document.getElementById("myDialog").appendChild(closeButton);
+                playlistList.className = 'collection';
+                for (var i = 0; i < playlistNum; i++) {
+                  var li_playlistDOM = document.createElement('li');
+                  var closeButtonLi = document.createElement('span');
+                  closeButtonLi.id = "closeButtonLi"+i;
+                  closeButtonLi.className = "close";
+                  closeButtonLi.innerHTML = "&times;";
+                  li_playlistDOM.id = 'PlaylistID'+i;
+                  li_playlistDOM.className = 'collection-item';
+                  var playlistOption = document.createTextNode(list[i].slice(0, -4));
+                  li_playlistDOM.appendChild(checkBox);
+                  li_playlistDOM.appendChild(playlistOption);
+                  li_playlistDOM.appendChild(closeButtonLi);
+                  playlistList.appendChild(li_playlistDOM);
+    
+                }
+                document.getElementById("myDialog").appendChild(playlistList);
+                document.getElementById("myDialog").appendChild(checkBox);
+                document.getElementById("myDialog").showModal();
+                //Functionality to add a new playlist file
+                document.getElementById('inputForm').addEventListener("keydown", function(event){
+                    var playListName = document.getElementById('inputForm').value;
+                    if (event.key === "Enter" && (playListName !== null || playListName !== "")){
+                      alert(currentlySelectedLink);
+                      ipcRenderer.send("youtube:createPlaylist",playListName,currentlySelectedLink,currentlySelectedImage,currentlySelectedTitle);
+                      document.getElementById("myDialog").close();
+                    }
+                });
+                document.getElementById('inputFormButton').addEventListener("click",function(event) {
+                    var playListName = document.getElementById('inputForm').value;
+                    if(playListName !== null || playListName !== ""){
+                      // alert(currentlySelectedLink);   
+                    }
+                    ipcRenderer.send("youtube:createPlaylist",playListName,currentlySelectedLink,currentlySelectedImage,currentlySelectedTitle);
+                    document.getElementById("myDialog").close();
+                });
+                //Functionality to delete playlist, should ask user if they are really sure
+                for (var i = 0; i < playlistNum; i++) {
+                  document.getElementById('closeButtonLi'+i).addEventListener("click",function(event){
+                    var listIndex = this.id.slice(-1);
+                    var result = confirm('Do you really want to permanently delete this playlist?', 'Delete Playlist "'+list[listIndex].slice(0, -4) + '" ?');
+                    if(result == true){
+                      ipcRenderer.send("youtube:deletePlaylist", list[listIndex].slice(0, -4));
+                      // alert("Deleted!", list[listIndex].slice(0, -4));
+                      document.getElementById("myDialog").close();
+                    }
+                  });
+                }
+                //Functionality to add a video to an existing playlist
+                for (var i = 0; i < playlistNum; i++) {
+                  document.getElementById('PlaylistID'+i).addEventListener("click",function(event) {
+
+                      var listIndex = this.id.slice(-1);
+                      // if(searchIndex.includes('n')){ //chop off n
+                      //   searchIndex = searchIndex.slice(-1);
+                      // }
+                      if(!(event.target.id.includes("closeButtonLi"))){ //long as we did not click on one of the closeButtonLi
+                        ipcRenderer.send("youtube:addToPlaylist", list[listIndex].slice(0, -4), currentlySelectedLink,currentlySelectedImage,currentlySelectedTitle);
+                        alert("listIndex is: "+ list[listIndex].slice(0, -4) + currentlySelectedLink);
+                      }
+                      // ipcRenderer.send("youtube:addToPlaylist",,playListName,currentlySelectedLink);
+                      
+                  });
+
+                } 
+              
+            }
+
+            window.onclick = function(event) {
+              if (event.target.id == "closeButton" || event.target.id == "modalText") {
+                    document.getElementById("myDialog").close();
+              }
+            }
+
+
+            </script>
+            <script>
+            const electron = require('electron');
+            const {ipcRenderer} = electron;
+            const ul = document.querySelector('#searchListOld');
+            var globalSearchObj;
 
             //catch add item
             ipcRenderer.on('item:add', function(e,item){
@@ -275,14 +540,11 @@
               ul.className = '';
             });
 
-            // ipcRenderer.on('youtube:searchHistory', function(e, searchHistory){
-            //     //Create a DropDown Menu Here
-
-            // });
 
             ipcRenderer.on('youtube:search', function(e,searchObj){
                 //alert("Message received!");
                 //document.getElementById("debug").innerHTML = "Message Received!";
+                globalSearchObj = searchObj;
                 var myResultObj = JSON.stringify(searchObj, undefined, 2);
                 //document.getElementById("debug2").innerHTML = "";
 
@@ -299,12 +561,14 @@
                     var list_item = document.createElement('li');
                     var image_item = document.createElement('img');
                     var playArrow_item = document.createElement('a');
+                    var linebreak = document.createElement("br");
+
 
                     list_item.className = 'collection-item';
-                    playArrow_item.className = 'red accent-4 btn-small';
+                    playArrow_item.className = 'red accent-4 dropdown-trigger btn-small'; //red accent-4 btn-small
                     playArrow_item.textContent = '▶';
                     playArrow_item.id = 'playButton'+i;
-
+                    //alert("Playarrow"+playArrow_item.id);
                     
                     //playArrow_item.textAlign = "right";
                     image_item.src = searchObj.items[i].snippet.thumbnails.default.url;                    
@@ -318,6 +582,12 @@
                     list_item.appendChild(itemText);
                     //playArrow_item.appendChild(setPlayOptionCss);
                     list_item.appendChild(playArrow_item);
+                    for (var j = 0; j < 12; j++) {
+                      var temp = document.createElement('a');
+                      list_item.appendChild(temp);
+                      temp.innerHTML = "Dog";
+                      list_item.appendChild(linebreak);
+                    }
                     ul_searchList.appendChild(list_item);
 
                     //Attach event after object created in DOM 
@@ -329,17 +599,36 @@
                         //Add dropdown menu here such as add to playlist1, 2, 3, 4, or remove from playlist
                         //when adding, this event function should use node.js via main.js to write to text file!                      
                         //Here we want to play the new video on click
-                        //alert(this.id);
-                        //alert(this.id.slice(-2));  //either two digit number or n#
                         var searchIndex = this.id.slice(-2);
                         if(searchIndex.includes('n')){ //chop off n
                           searchIndex = searchIndex.slice(-1);
                         }
-
+                        currentlySelectedLink = "https://www.youtube.com/watch?v=" + globalSearchObj.items[searchIndex].id.videoId;
+                        currentlySelectedImage = globalSearchObj.items[searchIndex].snippet.thumbnails.high.url;
+                        currentlySelectedTitle = globalSearchObj.items[searchIndex].snippet.title;
+                        // alert("In event listener: "+currentlySelectedLink);
+                        ipcRenderer.send("youtube:getPlaylistList",searchIndex);
+                        
 
                       });               
                   }
               });
+
+            ipcRenderer.on('youtube:getPlaylistList', function(e,list,buttonNumber){
+                //Create a DropDown Menu Here
+                // alert("Hello");
+                console.log("listerino is:",list);
+                //alert("hello");
+                // document.getElementById("putitin").innerHTML = list;
+                // for (var i = 0; i < searchObj.items.length; i++) {
+                // }
+                addToPlayList(list, buttonNumber);
+
+            });
+
+            ipcRenderer.on('youtube:createPlaylist', function(e, response){
+              console.log(response);
+            });
 
             //Remove item
             ul.addEventListener('dblclick', removeItem);
@@ -351,13 +640,7 @@
               }
             }
 
-          /* When the user clicks on the button, 
-          toggle between hiding and showing the dropdown content */
-          function toggleMenu(buttonNumber) {
-              //buttonNumber is the id like "playbutton1" "playbutton2" etc
-              var myButton = document.getElementById(this.buttonNumber);
-              myButton.classList.toggle("show");
-          }            
+   
 
 
           </script>

@@ -1,0 +1,24 @@
+                        //alert("searchIndex is: "+searchIndex, "Searching Video Now!");
+                        // alert(searchObj.items[searchIndex].id.videoId);
+                        // document.getElementById("debug").innerHTML = searchObj.items[searchIndex].id.videoId;
+                        // currentVideoLength = player.getDuration();
+                        // repeatVideoID = searchObj.items[searchIndex].id.videoId;
+                        // player.playVideo();
+
+
+
+                                        //Attach event listener to these newly created DOM elements
+                //document.getElementsByClassName("collection-item").addEventListener("click", playNewVideo);
+                //document.getElementsByClassName("collection").addEventListener("click", playNewVideo);
+                //document.getElementById("playButton"+i).addEventListener("click", playNewVideo("playButton"+i));
+                
+                //alert(searchObj.items[0].snippet.thumbnails.default.url);
+                // document.getElementById("debug7").innerHTML = "thumbnail url is: "+searchObj.items[0].snippet.thumbnails.default.url;
+                // document.getElementById("debug7").innerHTML = "thumbnail url is: "+searchObj.items[11].snippet.thumbnails.default.url;
+
+                    //document.getElementById("playButton").setAttribute("align", "right");                    
+
+
+
+
+                    //read from node.js what playlist files are available, if not available be able to create a new file

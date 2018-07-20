@@ -77,10 +77,129 @@ ipcMain.on('item:write', function(e, item1, item2){
     //mainWindow.webContents.send('item:write', item);
 });
 
-//Send List of Previously Searched Items
-ipcMain.on('youtube:searchHistory', function(e){
-    console.log(searchHistory);
-    mainWindow.webContents.send('youtube:searchHistory', searchHistory);
+//Send list of all playlist text files in the local folder "playlist"
+ipcMain.on('youtube:getPlaylistList', function(e, buttonNumber){
+    console.log("youtube:getPlaylistList");
+    var list = [];
+    var filePath = path.join(__dirname, '/playlist/');
+    console.log("The patherino is:", filePath);
+    // list = getPlaylistList();
+    fs.readdirSync(filePath).forEach(file => {
+      // console.log(file);
+      list.push(file);
+    });
+
+    console.log("list is:", list);
+
+    mainWindow.webContents.send('youtube:getPlaylistList', list, buttonNumber);
+    console.log("Sent from main.js!",list,buttonNumber);
+});
+
+function getPlaylistList(){
+    var result = [];
+    var filePath = path.join(__dirname, '/playlist/');
+    console.log(filePath);
+    // result = ['dog'];
+    // return result;
+    fs.readdirSync(filePath, function(err, items) { //use readdirSync
+        // console.log(mydir);
+        console.log(path);
+        console.log("Items is:", items);
+        console.log(items.length);
+     
+        for (var i=0; i<items.length; i++) {
+            console.log(items[i]);
+            result.push(items[i]);
+        }
+        console.log("Result is:",result);
+        console.log("Testingu!");
+        return result;   
+    });
+}
+function myCreateFile(fileName, data, image, title){
+    //Checks if the file exists, if it does not, creates that file and write the first link + newline
+    var filePath;
+    if(fileName !== ""){  //Reject empty file name
+        filePath = path.join(__dirname, '/playlist/'+fileName+'.txt');
+    }
+
+    try{
+        var response;
+        if (fs.existsSync(filePath)) {
+            response = "File Exists, Try another Playlist Name!"
+            console.log(response);
+            mainWindow.webContents.send('youtube:createPlaylist', response); //send the JSON object to be parsed at the other end
+            console.log("Sent");
+            console.log("*****************************************");
+        }else{
+            //writeFile starts a new file and writes to it
+            //write takes an existing file and writes more onto it (at the end of file)
+            fs.writeFile(filePath, data + ',' + image + ',' + title + '\n', function(err){
+                console.log("Wrote to file "+fileName);
+            });
+            response = "Playlist: "+ fileName + " has been created!";
+            mainWindow.webContents.send('youtube:createPlaylist', response); //send the JSON object to be parsed at the other end
+            console.log("Sent");
+            console.log("*****************************************");
+        }
+
+    }catch(err){
+        return console.log(err);
+    }
+}
+
+function myWriteFile(fileName, data, image, title){
+    //Fix so that instead of overwriting file, writes to the next line
+    var filePath;
+    if(fileName !== ""){  //Reject empty file name
+        filePath = path.join(__dirname, '/playlist/'+fileName+'.txt');
+    }
+    
+    try{
+          fs.open(filePath, 'a', 666, function( e, id ) {
+           fs.write( id, data + ',' + image + ',' + title + "\n", null, 'utf8', function(){
+            fs.close(id, function(){
+             console.log('file is updated');
+            });
+           });
+          });
+
+        //Doesn't work wonder why...
+        // fs.openSync(filePath, 'w', 666, function(err,id) {
+        //     fs.writeSync(id, data + '\n', null, 'utf8', function (err) {
+        //       if (err) {
+        //         console.log("Error Writing to "+fileName+'.txt');
+        //       } else {
+        //         console.log("Done Writing!");
+        //       }
+        //         fs.closeSync(id, function(){
+        //          console.log('file is updated');
+        //         });              
+        //     });   
+        // });     
+    }catch(err){
+        return console.log(err);
+    }
+    
+};
+
+//Create new playlist and add the first link user wants to store in it
+ipcMain.on('youtube:createPlaylist', function(e, playlist, link, image, title){
+    myCreateFile(playlist, link, image, title);
+    console.log("Finished creating new playlist file "+playlist+"!");
+});
+//Delete Playlist
+ipcMain.on('youtube:deletePlaylist', function(e, fileName){
+    console.log('*************Attempting to delete now!************');
+    var filePath = path.join(__dirname, '/playlist/'+fileName+'.txt');
+    fs.unlinkSync(filePath);
+    console.log("Finished deleting "+fileName+'.txt'+"!");
+});
+//Given the playlist name and the video link, add to that playlist file
+ipcMain.on('youtube:addToPlaylist', function(e, playlist, link, image, title){
+    //link is video url, image is image url, title is video title
+    myWriteFile(playlist, link, image, title);
+    console.log("Finished adding to playlist file!");
 });
 
 //Catch youtube:search
@@ -108,20 +227,6 @@ ipcMain.on('youtube:search', function(e, videoName){
     });
 });
 
-
-
-function myWriteFile(fileName, data){
-    var filePath = path.join(__dirname, '/text_files/'+fileName);
-
-    try{
-        fs.writeFile(filePath, data, function(err){
-            console.log("Wrote to file "+fileName)
-        });
-    }catch(err){
-        return console.log(err);
-    }
-    
-};
 
 // Create menu template
 const mainMenuTemplate = [

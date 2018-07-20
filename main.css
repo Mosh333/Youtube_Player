@@ -54,3 +54,40 @@
 	position: absolute;
 	right: 0;
 }
+
+
+/* The Close Button */
+#closeButton {
+/*	position: absolute;
+	top: -7px;
+    left: 407px;*/
+    float: right;
+    color: #aaaaaa;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+#closeButton:hover,
+#closeButton:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+li[id*="PlaylistID"]:hover {
+	color: red;
+}
+
+span[id*="closeButtonLi"]{
+	position: relative;
+	float: right;
+	font-weight: 1000;
+	font-size: 20px;
+}
+
+span[id*="closeButtonLi"]:hover,
+span[id*="closeButtonLi"]:focus {
+    color: blue;
+    text-decoration: none;
+    cursor: pointer;
+}

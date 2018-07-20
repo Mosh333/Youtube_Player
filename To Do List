@@ -1,0 +1,13 @@
+To Do List
+
+
+-this function will display appropriate contents about the selected playlist
+-top should be just one image in center and two button left and right and the image should just change every 5 sec of the selected playlist
+-the select menu should dynamically update based on the playlists (take care of cases when new playlist was made) once the playlist is selected
+-user should be able to reorder by clicking the two songs one after another to swap
+-the songs should have x to delete from (play)list 
+
+
+
+Done List
+-DO I NEED TO STORE SPECIAL INFORMATION LIKE VIDEO NAME, PIC URL, AND VID URL IN THE FOLDER PLAYLIST_SUPPLEMENTARY?
