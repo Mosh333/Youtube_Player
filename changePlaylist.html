@@ -208,11 +208,11 @@
               <div id="bottom_lower_half_container">
                 <select id="selectOptionsPlaylist" class="browser-default">
                   <option value="" disabled selected>Choose your playlist to modify</option>
-                  <option value="1">Search a Video</option>
+<!--                   <option value="1">Search a Video</option>
                   <option value="2">Play a Playlist</option>
                   <option value="3">Create/Modify Playlist</option>                
                   <option value="4">Generate Playlist Text File</option>
-                  <option value="5">If not hard, convert to MP3</option>
+                  <option value="5">If not hard, convert to MP3</option> -->
                 </select>
                 <!-- <button id="button1" class="waves-effect waves-light btn">Make Playlist</button> -->
 
@@ -335,11 +335,79 @@
 
                   });
 
+                  document.getElementById('slideshow-image').addEventListener("click", function(event) {
+                    isPaused = !isPaused;
+                    if(isPaused){
+                      setTimeout(setToUnpause, 5000);                                      
+                    }
+                  });
+
                   function setToUnpause(){
                     isPaused = false;
                   }
 
-                  // document.getElementById()
+                  document.getElementById('selectOptionsPlaylist').addEventListener("mouseover", function(event) {
+                    //Update contents of the select option everytime we hover over it
+                    var displayContainer = document.getElementById('content1');
+                    var selectOptionsContainer = document.getElementById('selectOptionsPlaylist');
+                    var selectOptionsQty = selectOptionsContainer.options.length;
+                    //First clear all the options!
+                    
+ 
+
+                    for (var i = 0; i < globalPlaylistList.length; i++) {
+                      var option = document.createElement('option');
+                      option.text = globalPlaylistList[i]; //this list should be a global variable storing the current playlists
+                      option.value = i+1; //keep it standard indexing
+                      selectOptionsContainer.add(option);
+                    }
+
+
+                    if(displayContainer.innerHTML == '8======D'){
+                      displayContainer.innerHTML = '{}';
+                    }else{
+                      displayContainer.innerHTML = '8======D';
+                    }
+
+                    
+                  });
+                 
+                </script>
+                <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js">
+                  $(function() {
+
+                    // // initialize
+                    // $('.materialSelect').material_select();
+
+                    // // setup listener for custom event to re-initialize on change
+                    // $('.materialSelect').on('contentChanged', function() {
+                    //   $(this).material_select();
+                    // });
+
+                    // update function for demo purposes
+                    $("#playlistContent1").click(function() {
+                      alert("adffad");
+                       // add new value
+                      // var newValue = getNewDoggo();
+                      // var $newOpt = $("<option>").attr("value",newValue).text(newValue)
+                      // $("#selectOptionsPlaylist").append($newOpt);
+
+                      // // fire custom event anytime you've updated select
+                      // $("#selectOptionsPlaylist").trigger('contentChanged');
+                      
+                    });
+
+                  });                  
+
+                  function getNewDoggo() {
+                    var adjs =  ['Floofy','Big','Cute','Cuddly','Lazy'];
+                    var nouns = ['Doggo','Floofer','Pupper','Fluffer', 'Nugget'];
+                    var newOptValue = adjs[Math.floor(Math.random() * adjs.length)] + " " + 
+                                      nouns[Math.floor(Math.random() * nouns.length)];
+                    return newOptValue;
+                  }
+
+
                 </script>
 
                   <div id=playlistContent1>
@@ -420,6 +488,7 @@
                 checkBox.setAttribute("type", "checkbox");
                 checkBox.className = "filled-in";
                 document.getElementById("putitin").innerHTML = list;
+                globalPlaylistList = list;
                 var playlistNum = list.length; //counts number of playlist
                 var li_createNewPlaylistDOM = document.createElement('li');
                 li_createNewPlaylistDOM.className = 'collection-item';
@@ -467,6 +536,9 @@
                     if (event.key === "Enter" && (playListName !== null || playListName !== "")){
                       alert(currentlySelectedLink);
                       ipcRenderer.send("youtube:createPlaylist",playListName,currentlySelectedLink,currentlySelectedImage,currentlySelectedTitle);
+                      globalPlaylistList.push(playListName+'.txt');
+                      globalPlaylistList.sort();
+                      document.getElementById("putitin").innerHTML = globalPlaylistList;
                       document.getElementById("myDialog").close();
                     }
                 });
@@ -474,8 +546,12 @@
                     var playListName = document.getElementById('inputForm').value;
                     if(playListName !== null || playListName !== ""){
                       // alert(currentlySelectedLink);   
+                      globalPlaylistList.push(playListName+'.txt');
+                      globalPlaylistList.sort();
+                      
                     }
                     ipcRenderer.send("youtube:createPlaylist",playListName,currentlySelectedLink,currentlySelectedImage,currentlySelectedTitle);
+                    document.getElementById("putitin").innerHTML = globalPlaylistList;
                     document.getElementById("myDialog").close();
                 });
                 //Functionality to delete playlist, should ask user if they are really sure
@@ -486,6 +562,8 @@
                     if(result == true){
                       ipcRenderer.send("youtube:deletePlaylist", list[listIndex].slice(0, -4));
                       // alert("Deleted!", list[listIndex].slice(0, -4));
+                      globalPlaylistList = list; //update instantly
+                      document.getElementById("putitin").innerHTML = list;
                       document.getElementById("myDialog").close();
                     }
                   });
@@ -501,6 +579,8 @@
                       if(!(event.target.id.includes("closeButtonLi"))){ //long as we did not click on one of the closeButtonLi
                         ipcRenderer.send("youtube:addToPlaylist", list[listIndex].slice(0, -4), currentlySelectedLink,currentlySelectedImage,currentlySelectedTitle);
                         alert("listIndex is: "+ list[listIndex].slice(0, -4) + currentlySelectedLink);
+                        globalPlaylistList = list; //update instantly
+                        document.getElementById("putitin").innerHTML = list;
                       }
                       // ipcRenderer.send("youtube:addToPlaylist",,playListName,currentlySelectedLink);
                       
