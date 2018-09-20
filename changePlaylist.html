@@ -217,6 +217,7 @@
                 <!-- <button id="button1" class="waves-effect waves-light btn">Make Playlist</button> -->
 
                 <script>
+                  var globalPlaylistList;
                   var tempPlaylist = document.getElementById("selectOptionsPlaylist").addEventListener("change", displayPlaylistContent);
 
                   //this function will display appropriate contents about the selected playlist
@@ -338,7 +339,7 @@
                   document.getElementById('slideshow-image').addEventListener("click", function(event) {
                     isPaused = !isPaused;
                     if(isPaused){
-                      setTimeout(setToUnpause, 5000);                                      
+                      setTimeout(setToUnpause, 50000);                                      
                     }
                   });
 
@@ -352,9 +353,26 @@
                     var selectOptionsContainer = document.getElementById('selectOptionsPlaylist');
                     var selectOptionsQty = selectOptionsContainer.options.length;
                     //First clear all the options!
-                    
+                    if(selectOptionsQty>0){
+                      for (var i = 0; i < selectOptionsQty; i++) {
+                        selectOptionsContainer.options[i] = null;
+                      }                      
+                    }else if(selectOptionsQty == 0){
+                      //to get the playlist list
+                      var myInitOption = 1; //not initializing the drop down
+                      ipcRenderer.send("youtube:getPlaylistList",selectOptionsContainer, myInitOption);
+                      //<option value="" disabled selected>Choose your option</option>
+                      var option = document.createElement('option');
+                      option.text = "Choose Your Playlist";
+                      selectOptionsContainer.add(option);
+                      for (var i = 0; i < globalPlaylistList.length; i++) {
+                        var option = document.createElement('option');
+                        option.text = globalPlaylistList[i]; //this list should be a global variable storing the current playlists
+                        option.value = i+1; //keep it standard indexing
+                        selectOptionsContainer.add(option);
+                      }
+                    }
  
-
                     for (var i = 0; i < globalPlaylistList.length; i++) {
                       var option = document.createElement('option');
                       option.text = globalPlaylistList[i]; //this list should be a global variable storing the current playlists
@@ -687,22 +705,30 @@
                         currentlySelectedImage = globalSearchObj.items[searchIndex].snippet.thumbnails.high.url;
                         currentlySelectedTitle = globalSearchObj.items[searchIndex].snippet.title;
                         // alert("In event listener: "+currentlySelectedLink);
-                        ipcRenderer.send("youtube:getPlaylistList",searchIndex);
+                        var myInitOption = 0; //not initializing the drop down
+                        ipcRenderer.send("youtube:getPlaylistList",searchIndex,myInitOption);
                         
 
                       });               
                   }
               });
 
-            ipcRenderer.on('youtube:getPlaylistList', function(e,list,buttonNumber){
+            ipcRenderer.on('youtube:getPlaylistList', function(e,list,buttonNumber, initOption){
                 //Create a DropDown Menu Here
                 // alert("Hello");
-                console.log("listerino is:",list);
+                console.log("listerino is:",list,"initOption is: ", initOption);
                 //alert("hello");
                 // document.getElementById("putitin").innerHTML = list;
                 // for (var i = 0; i < searchObj.items.length; i++) {
                 // }
-                addToPlayList(list, buttonNumber);
+                if(initOption==1){
+                  globalPlaylistList = list;
+                  for (var i = 0; i < globalPlaylistList.length; i++) {
+                    globalPlaylistList[i] = globalPlaylistList[i].slice(0, -4);
+                  }
+                }else if(initOption==0){
+                  addToPlayList(list, buttonNumber);
+                }
 
             });
 

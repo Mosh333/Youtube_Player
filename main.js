@@ -78,7 +78,7 @@ ipcMain.on('item:write', function(e, item1, item2){
 });
 
 //Send list of all playlist text files in the local folder "playlist"
-ipcMain.on('youtube:getPlaylistList', function(e, buttonNumber){
+ipcMain.on('youtube:getPlaylistList', function(e, buttonNumber, initOption){
     console.log("youtube:getPlaylistList");
     var list = [];
     var filePath = path.join(__dirname, '/playlist/');
@@ -90,8 +90,9 @@ ipcMain.on('youtube:getPlaylistList', function(e, buttonNumber){
     });
 
     console.log("list is:", list);
+    console.log("initOption is:", initOption);
 
-    mainWindow.webContents.send('youtube:getPlaylistList', list, buttonNumber);
+    mainWindow.webContents.send('youtube:getPlaylistList', list, buttonNumber, initOption);
     console.log("Sent from main.js!",list,buttonNumber);
 });
 
